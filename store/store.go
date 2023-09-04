@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-// Note Id
+// Note represents a note in the database
 type Note struct {
 	Id              uint   `json:"id"`
 	Title           string `json:"title"`
