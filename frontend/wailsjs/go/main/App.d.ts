@@ -6,6 +6,8 @@ export function CreateNote(arg1:store.Note):Promise<number>;
 
 export function DeleteNote(arg1:number):Promise<boolean>;
 
+export function FavNote(arg1:number,arg2:number):Promise<boolean>;
+
 export function GetNote(arg1:number):Promise<store.Note>;
 
 export function GetNotes():Promise<Array<store.Note>>;

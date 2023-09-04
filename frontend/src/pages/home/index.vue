@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import {StickyNote, CircleOff} from 'lucide-vue-next';
+import {StickyNote, CircleOff, Folder} from 'lucide-vue-next';
 import NoteCard from "../../components/cards/NoteCard.vue";
 import {useNotesStore} from "../../store/notes";
 import FolderCard from "../../components/cards/FolderCard.vue";
 import {promptDialog} from "../../components/dialogs";
 import {useRoute, useRouter} from "vue-router";
-import FolderContentCard from "../../components/cards/FolderContentCard.vue";
-//
-
-//
-import {onMounted, ref, watch} from "vue";
-import {onKeyStroke} from "@vueuse/core";
-
 
 const notesStore = useNotesStore();
 const router = useRouter();
@@ -42,12 +35,8 @@ const createNote = () => {
 const handleFolder = (id: number) => {
   router.push({path: route.path, query: {folder: id}})
 }
-
-
-</script> :
-
+</script>
 <template>
-  {{$route.query}}
   <div>
     <div class="flex justify-between px-6 py-4">
       <div>
@@ -73,8 +62,25 @@ const handleFolder = (id: number) => {
       </div>
     </div>
     <div>
+      <div v-if="notesStore.nodes.filter((n) => n.isFav === 1).length" class="px-6 select-none">
+        <h1>Favourites</h1>
+      </div>
+      <div v-if="notesStore.nodes.filter((n) => n.isFav === 1).length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3 px-6 py-4">
+        <template v-for="note in notesStore.nodes.filter((n) => n.isFav === 1)">
+          <FolderCard
+              :id="`folder${note.id}`"
+              @click.stop="handleFolder(note.id)"
+              :note="note" v-if="note.isDir"/>
+          <NoteCard
+              :id="`note${note.id}`"
+              :note="note" v-else/>
+        </template>
+      </div>
+      <div  v-if="notesStore.nodes.filter((n) => n.isFav === 1).length" class="px-6 pt-4 select-none">
+        <h1>Notes</h1>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3 px-6 py-4">
-        <template v-for="note in notesStore.nodes.filter((n) => n.parentId === 0)">
+        <template v-for="note in notesStore.nodes.filter((n) => n.parentId === 0 && n.isFav === 0)">
           <FolderCard
               :id="`folder${note.id}`"
               @click.stop="handleFolder(note.id)"

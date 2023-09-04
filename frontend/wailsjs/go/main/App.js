@@ -10,6 +10,10 @@ export function DeleteNote(arg1) {
   return window['go']['main']['App']['DeleteNote'](arg1);
 }
 
+export function FavNote(arg1, arg2) {
+  return window['go']['main']['App']['FavNote'](arg1, arg2);
+}
+
 export function GetNote(arg1) {
   return window['go']['main']['App']['GetNote'](arg1);
 }

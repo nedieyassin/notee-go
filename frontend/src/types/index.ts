@@ -4,6 +4,7 @@ export interface INote {
     body: string,
     isDir: number,
     parentId: number,
+    isFav: number,
     createTimestamp: number,
     updateTimestamp: number,
 }

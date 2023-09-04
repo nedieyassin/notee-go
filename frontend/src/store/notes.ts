@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {
     CreateNote,
-    DeleteNote,
+    DeleteNote, FavNote,
     GetNote,
     GetNotes,
     RenameNote,
@@ -66,6 +66,12 @@ export const useNotesStore = defineStore('notes-store', {
         },
         updateNote(id: number, body: string) {
             return UpdateNote(id, body);
+        },
+
+        updateFav(id: number, isFav: number) {
+            FavNote(id, isFav).then((r) => {
+                if (r) this.syncNote()
+            });
         },
 
 

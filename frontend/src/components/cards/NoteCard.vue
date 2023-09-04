@@ -1,11 +1,10 @@
 <script setup lang="ts">
 
-import {StickyNote, Pencil, Trash2} from "lucide-vue-next";
-import {PropType} from "vue";
+import {StickyNote, MoreVertical, Star, Trash2, Pencil, X} from "lucide-vue-next";
+import {PropType, ref} from "vue";
 import {INote} from "../../types";
 import {useNotesStore} from "../../store/notes";
 import {confirmDialog, promptDialog} from "../dialogs";
-import {formatDateString} from "../../utils";
 
 defineProps({
   note: {
@@ -16,6 +15,7 @@ defineProps({
 })
 
 const notesStore = useNotesStore();
+const isOpen = ref(false);
 
 const deleteNote = (id: number) => {
   confirmDialog({
@@ -41,6 +41,10 @@ const renameNote = (id: number, title: string) => {
     }
   })
 }
+
+const isFav = (id: number, isFav: number) => {
+  notesStore.updateFav(id, isFav === 1 ? 0 : 1);
+}
 </script>
 
 <template>
@@ -53,13 +57,23 @@ const renameNote = (id: number, title: string) => {
       </div>
     </div>
     <div class="group-hover:flex absolute hidden gap-2 items-center right-0 pr-2">
-      <button @click.stop="renameNote(note.id, note.title)"
+      <button v-if="!isOpen" @click.stop="isFav(note.id, note.isFav)"
+              :class="[note.isFav ? 'bg-black text-white' : 'bg-white hover:bg-black hover:text-white']"
+              class="p-2 border-2 border-black rounded-lg">
+        <Star size="20"/>
+      </button>
+      <button v-if="isOpen" @click.stop="renameNote(note.id, note.title)"
               class="p-2 border-2 border-black rounded-lg bg-white hover:bg-black hover:text-white">
         <Pencil size="20"/>
       </button>
-      <button @click.stop="deleteNote(note.id)"
+      <button v-if="isOpen" @click.stop="deleteNote(note.id)"
               class="p-2 border-2 border-black rounded-lg bg-white hover:bg-black hover:text-white">
         <Trash2 size="20"/>
+      </button>
+      <button @click.stop="isOpen = !isOpen"
+              class="p-2 border-2 border-black rounded-lg bg-white hover:bg-black hover:text-white">
+        <X v-if="isOpen" size="20"/>
+        <MoreVertical v-else size="20"/>
       </button>
     </div>
   </button>

@@ -101,8 +101,8 @@ func DeleteNote(id *uint) bool {
 		}
 	}(db)
 
-	stmt, _ := db.Prepare("DELETE FROM notes WHERE id=?")
-	_, err = stmt.Exec(id)
+	stmt, _ := db.Prepare("DELETE FROM notes WHERE id=? OR parentId=?")
+	_, err = stmt.Exec(id, id)
 	if err != nil {
 		return false
 	} else {
@@ -125,6 +125,28 @@ func UpdateNoteTitle(id *uint, title *string) bool {
 
 	stmt, _ := db.Prepare("UPDATE notes SET title=? WHERE id=?")
 	_, err = stmt.Exec(title, id)
+	if err != nil {
+		return false
+	} else {
+		return true
+	}
+
+}
+
+func UpdateFav(id *uint, isFav *uint) bool {
+	db, err := getDatabase()
+	if err != nil {
+		log.Println(err)
+	}
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+
+		}
+	}(db)
+
+	stmt, _ := db.Prepare("UPDATE notes SET isFav=? WHERE id=?")
+	_, err = stmt.Exec(isFav, id)
 	if err != nil {
 		return false
 	} else {

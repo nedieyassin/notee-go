@@ -38,6 +38,10 @@ func (a *App) RenameNote(id uint, title string) bool {
 	return store.UpdateNoteTitle(&id, &title)
 }
 
+func (a *App) FavNote(id uint, isFav uint) bool {
+	return store.UpdateFav(&id, &isFav)
+}
+
 func (a *App) UpdateNote(id uint, body string) bool {
 	return store.UpdateNote(&id, &body)
 }
